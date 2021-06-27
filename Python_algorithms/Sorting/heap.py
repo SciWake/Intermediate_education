@@ -1,3 +1,8 @@
+# Генерация массива
+
+mass = [i for i in range(20, 0, -1)]
+
+
 def heapify(nums, heap_size, root_index):
     # Индекс наибольшего элемента считаем корневым индексом
     largest = root_index
@@ -33,8 +38,5 @@ def heap_sort(nums):
         nums[i], nums[0] = nums[0], nums[i]
         heapify(nums, i, 0)
 
-
-# Проверяем, что оно работает
-random_list_of_nums = [4, 10, 3, 5, 1]
-heap_sort(random_list_of_nums)
-print(random_list_of_nums)
+# python -m timeit -n 1000 "import heap" "heap.heap_sort(heap.mass)"
+# 1000 loops, best of 5: 70.2 usec per loop
