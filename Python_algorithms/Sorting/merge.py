@@ -8,11 +8,8 @@
 '''
 
 # Генерация массива
-import random
 
-size = 20
-mass = [i for i in range(size)]
-random.shuffle(mass)
+mass = [i for i in range(20, 0, -1)]
 
 
 # РЕАЛИЗАЦИЯ 1
