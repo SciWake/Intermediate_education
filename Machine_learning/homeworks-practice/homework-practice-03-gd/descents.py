@@ -79,9 +79,11 @@ class BaseDescent:
 
         # Вариант 1 - Работает медленее
         # np.sum((x @ w - y) ** 2) / y.shape[0]
-
-        sqr = y - x @ self.w
-        return (sqr.T @ sqr) / y.shape[0]
+        if self.loss_function == LossFunction.MSE:
+            sqr = y - x @ self.w
+            return (sqr.T @ sqr) / y.shape[0]
+        if self.loss_function == LossFunction.LogCosh:
+            return np.sum(np.log(np.cosh(y - x @ self.w))) / y.shape[0]
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -112,7 +114,10 @@ class VanillaGradientDescent(BaseDescent):
     def calc_gradient(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
         # TODO: implement calculating gradient function
         # raise NotImplementedError('VanillaGradientDescent calc_gradient function not implemented')
-        return 2 * x.T @ (x @ self.w - y) / y.shape[0]
+        if self.loss_function == LossFunction.MSE:
+            return 2 * x.T @ (x @ self.w - y) / y.shape[0]
+        if self.loss_function == LossFunction.LogCosh:
+            return np.tanh(x @ self.w - y) @ x / y.shape[0]
 
 
 class StochasticDescent(VanillaGradientDescent):
@@ -137,7 +142,9 @@ class StochasticDescent(VanillaGradientDescent):
 
         # Вариант 1 - Работает очень медленно при больших выборках
         inds = np.random.choice(np.arange(x.shape[0]), size=self.batch_size, replace=False)
-        return 2 * x[inds].T @ (x[inds] @ self.w - y[inds]) / inds.shape[0]
+        upd_x = x[inds]
+        upd_y = y[inds]
+        return super().calc_gradient(upd_x, upd_y)
 
 
 class MomentumDescent(VanillaGradientDescent):
