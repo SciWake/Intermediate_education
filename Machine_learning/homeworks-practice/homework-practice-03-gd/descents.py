@@ -84,6 +84,8 @@ class BaseDescent:
             return (sqr.T @ sqr) / y.shape[0]
         if self.loss_function == LossFunction.LogCosh:
             return np.sum(np.log(np.cosh(y - x @ self.w))) / y.shape[0]
+        if self.loss_function == LossFunction.MAE:
+            return np.sum(x @ self.w - y) / y.shape[0]
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -118,6 +120,9 @@ class VanillaGradientDescent(BaseDescent):
             return 2 * x.T @ (x @ self.w - y) / y.shape[0]
         if self.loss_function == LossFunction.LogCosh:
             return np.tanh(x @ self.w - y) @ x / y.shape[0]
+        if self.loss_function == LossFunction.MAE:
+            signw = np.sign(x.T @ (x @ self.w - y))
+            return signw
 
 
 class StochasticDescent(VanillaGradientDescent):
