@@ -86,6 +86,12 @@ class BaseDescent:
             return np.sum(np.log(np.cosh(y - x @ self.w))) / y.shape[0]
         if self.loss_function == LossFunction.MAE:
             return np.sum(x @ self.w - y) / y.shape[0]
+        if self.loss_function == LossFunction.Huber:
+            nu = 1
+            if np.sum(np.abs(y - self.predict(x))) < nu:  # В данный блок мы вообще не заходим, где-то ошибка
+                return np.sum((y - self.predict(x)) ** 2) / 2
+            elif np.sum(np.abs(y - self.predict(x))) >= nu:
+                return nu * (np.sum(np.abs(y - self.predict(x))) - 1 / 2 * nu)
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -123,6 +129,12 @@ class VanillaGradientDescent(BaseDescent):
         if self.loss_function == LossFunction.MAE:
             signw = np.sign(x.T @ (x @ self.w - y))
             return signw
+        if self.loss_function == LossFunction.Huber:
+            nu = 1
+            if np.sum(np.abs(y - self.predict(x))) < nu:  # В данный блок мы вообще не заходим, где-то ошибка
+                return x.T.dot(x @ self.w - y) / y.shape[0]
+            elif np.sum(np.abs(y - self.predict(x))) >= nu:
+                return nu * np.sign(x.T @ (x @ self.w - y))
 
 
 class StochasticDescent(VanillaGradientDescent):
@@ -204,7 +216,7 @@ class Adam(VanillaGradientDescent):
         hat_m = self.m / (1 - self.beta_1 ** self.iteration)
         hat_v = self.v / (1 - self.beta_2 ** self.iteration)
 
-        adam_moment = - self.lr() * hat_m / (hat_v**0.5 + self.eps)
+        adam_moment = - self.lr() * hat_m / (hat_v ** 0.5 + self.eps)
 
         self.w += adam_moment
         return adam_moment
