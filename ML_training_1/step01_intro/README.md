@@ -1,3 +1,8 @@
+## Тренировки по ML. Лекция 1: Вводная по ML + knn
+
+
+## Дополнительные материалы:
+
 [Слайды](./lecture01_intro_knn_naive_bayes.pdf)
 
 Доп. материалы:
@@ -8,7 +13,8 @@
  * Серия видео от 3blue1brown о центральной предельной теореме: [на английском (оригинал)](https://www.youtube.com/playlist?list=PLZHQObOWTQDOMxJDswBaLu8xBMKxSTvg8)
  * Видео о теореме Байеса от 3blue1brown: [один](https://www.youtube.com/watch?v=HZGCoVF3YvM), [два](https://www.youtube.com/watch?v=lG4VkPoG3ko), [три](https://www.youtube.com/watch?v=U_85TaXbeIo)
 
-### Тренировки по ML. Лекция 1: Вводная по ML + knn
+
+## Список To Do:
 
 * ndependent and Identically Distributed (независимые и одинаково распределённые данные) 
     - Когда данные не i.i.d? Как работать с такими данными?
